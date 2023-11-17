@@ -10,7 +10,6 @@ In this project we are using poetry to handle python dependencies.
 
 - Python 3.10 from official website
 - Poetry (https://python-poetry.org/docs/#installation)
-- [Task](https://taskfile.dev/)
 
 ## Installation
 
