@@ -33,3 +33,25 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class DocumentBase(BaseModel):
+    name: str
+    embed_content: str
+    path: str
+
+
+class DocumentCreate(DocumentBase):
+    name: str
+    embed_content: str
+    path: str
+
+
+class Document(DocumentBase):
+    id: int
+    name: str
+    embed_content: str
+    path: str
+
+    class Config:
+        orm_mode = True

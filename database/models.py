@@ -24,3 +24,12 @@ class Item(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="items")
+
+
+class Document(Base):
+    __tablename__ = 'documents'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    embed_content = Column(String, index=True)
+    path = Column(String, index=True)
