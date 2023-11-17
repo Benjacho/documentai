@@ -59,7 +59,8 @@ def upload_documents(db: Session, files: list[UploadFile]):
     settings = Settings()
     client = OpenAI(api_key=settings.openai_api_key)
 
-    file_ids = client.beta.assistants.retrieve(assistant_id=settings.assistant_id).file_ids
+    files = client.beta.assistants.files.list(assistant_id=settings.assistant_id)
+    file_ids = [file.id for file in files]
 
     for file in files:
         file = client.files.create(file=file.file.read(), purpose='assistants')
