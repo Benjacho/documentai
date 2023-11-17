@@ -31,5 +31,4 @@ class Document(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    embed_content = Column(String, index=True)
-    path = Column(String, index=True)
+    external_id = Column(String, index=True)

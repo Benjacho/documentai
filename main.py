@@ -16,6 +16,7 @@ app.add_middleware(
     allow_origins='*',
 )
 
+
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -37,14 +38,5 @@ def create_document(document: schemas.DocumentCreate, db: Session = Depends(get_
 
 
 @app.post("/documents/upload")
-async def upload_documents(files: list[UploadFile]):
-    return crud.upload_documents(files)
-
-
-@app.get("/test")
-async def test():
-    print('hello')
-    client = OpenAI(api_key=settings.openai_api_key)
-    assistant = client.beta.assistants.retrieve(assistant_id=settings.assistant_id)
-    print(assistant)
-    return {"assistant": assistant}
+async def upload_documents(files: list[UploadFile], db: Session = Depends(get_db)):
+    return crud.upload_documents(db=db, files=files)

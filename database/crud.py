@@ -1,6 +1,8 @@
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
+from openai import OpenAI
 
+from settings import Settings
 from . import models, schemas
 
 
@@ -53,5 +55,19 @@ def get_documents(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Document).offset(skip).limit(limit).all()
 
 
-def upload_documents(files: list[UploadFile]):
-    return {"filename": [file.filename for file in files]}
+def upload_documents(db: Session, files: list[UploadFile]):
+    settings = Settings()
+
+    file_ids = [id_tuple[0] for id_tuple in db.query(models.Document.external_id).all()]
+    client = OpenAI(api_key=settings.openai_api_key)
+
+    for file in files:
+        file = client.files.create(file=file.file.read(), purpose='assistants')
+        db_item = models.Document(name=file.filename, external_id=file.id)
+        db.add(db_item)
+        db.commit()
+        file_ids.append(file.id)
+
+    client.beta.assistants.update(assistant_id=settings.assistant_id, file_ids=file_ids)
+    assistant = client.beta.assistants.retrieve(assistant_id=settings.assistant_id)
+    return {"assistant": assistant}
