@@ -27,3 +27,9 @@ poetry install
 poetry shell
 ```
 
+
+## Start server
+
+```
+uvicorn app.main:app --reload
+```
