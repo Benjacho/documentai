@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.orm import Session
 
@@ -15,6 +16,10 @@ models.Base.metadata.create_all(bind=engine)
 settings = Settings()
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins='*',
+)
 
 # Dependency
 def get_db():
