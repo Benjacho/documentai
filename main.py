@@ -1,11 +1,18 @@
 from fastapi import Depends, FastAPI, UploadFile
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.orm import Session
 
 from database import crud, models, schemas
 from database.bootstrap import SessionLocal, engine
 
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
+
+
 models.Base.metadata.create_all(bind=engine)
 
+settings = Settings()
 app = FastAPI()
 
 
