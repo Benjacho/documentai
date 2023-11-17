@@ -1,3 +1,4 @@
+from fastapi import UploadFile
 from sqlalchemy.orm import Session
 
 from . import models, schemas
@@ -50,3 +51,7 @@ def get_document(db: Session, document_id: int):
 
 def get_documents(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Document).offset(skip).limit(limit).all()
+
+
+def upload_documents(files: list[UploadFile]):
+    return {"filename": [file.filename for file in files]}

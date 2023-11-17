@@ -11,6 +11,7 @@ python = "^3.10"
 sqlalchemy = "^2.0.23"
 fastapi = "^0.104.1"
 python-multipart = "^0.0.6"
+boto3 = "^1.29.2"
 
 
 [build-system]
