@@ -1,6 +1,7 @@
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
 from openai import OpenAI
+import time
 
 from settings import Settings
 from . import models, schemas
@@ -72,3 +73,26 @@ def upload_documents(db: Session, files: list[UploadFile]):
     client.beta.assistants.update(assistant_id=settings.assistant_id, file_ids=file_ids)
     assistant = client.beta.assistants.retrieve(assistant_id=settings.assistant_id)
     return {"assistant": assistant}
+
+
+def chat(db: Session, message: str):
+    settings = Settings()
+    client = OpenAI(api_key=settings.openai_api_key)
+
+    client.beta.threads.messages.create(thread_id=settings.thread_id, role="user", content=message)
+    run = client.beta.threads.runs.create(
+        thread_id=settings.thread_id,
+        assistant_id=settings.assistant_id,
+    )
+
+    while True:
+        run_status = client.beta.threads.runs.retrieve(
+            thread_id=settings.thread_id,
+            run_id=run.id
+        )
+
+        if run_status.status == 'completed':
+            messages = client.beta.threads.messages.list(thread_id=settings.thread_id)
+            return {"messages": messages}
+        else:
+            time.sleep(5)  # Sleep for 5 seconds before checking again

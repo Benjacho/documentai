@@ -40,3 +40,8 @@ def create_document(document: schemas.DocumentCreate, db: Session = Depends(get_
 @app.post("/documents/upload")
 async def upload_documents(files: list[UploadFile], db: Session = Depends(get_db)):
     return crud.upload_documents(db=db, files=files)
+
+
+@app.post("/chat")
+async def chat(message: str, db: Session = Depends(get_db)):
+    return crud.chat(db=db, message=message)
