@@ -1,18 +1,13 @@
 from fastapi import Depends, FastAPI, UploadFile
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.orm import Session
+from openai import OpenAI
 
 from database import crud, models, schemas
 from database.bootstrap import SessionLocal, engine
-
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
-
+from settings import settings
 
 models.Base.metadata.create_all(bind=engine)
 
-settings = Settings()
 app = FastAPI()
 
 
@@ -39,3 +34,12 @@ def create_document(document: schemas.DocumentCreate, db: Session = Depends(get_
 @app.post("/documents/upload")
 async def upload_documents(files: list[UploadFile]):
     return crud.upload_documents(files)
+
+
+@app.get("/test")
+async def test():
+    print('hello')
+    client = OpenAI(api_key=settings.openai_api_key)
+    assistant = client.beta.assistants.retrieve(assistant_id=settings.assistant_id)
+    print(assistant)
+    return {"assistant": assistant}
