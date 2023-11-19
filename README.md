@@ -1,10 +1,4 @@
-# Timebilling Datawarehouse Project
-
-## Introduction
-
-Project about Datawarehouse as a service for timebilling.
-
-In this project we are using poetry to handle python dependencies.
+#Hackathon Project
 
 ## Requirements
 
@@ -26,7 +20,6 @@ poetry install
 ```bash
 poetry shell
 ```
-
 
 ## Start server
 
