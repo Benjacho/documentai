@@ -32,3 +32,4 @@ class Document(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     external_id = Column(String, index=True)
+    category = Column(String, index=True, nullable=True)
